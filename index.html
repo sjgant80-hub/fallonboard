@@ -254,22 +254,19 @@ input[type=radio]{width:auto;margin-right:6px;accent-color:var(--brass)}
     'llama-3b':  { id: 'Llama-3.2-3B-Instruct-q4f16_1-MLC',   size: '~2GB',   label: '3B · balanced · default · most laptops' },
     'qwen-7b':   { id: 'Qwen2.5-7B-Instruct-q4f16_1-MLC',     size: '~5GB',   label: '7B · capable · needs decent GPU (M-series Mac / 8GB+ VRAM)' },
     'llama-8b':  { id: 'Llama-3.1-8B-Instruct-q4f16_1-MLC',   size: '~5GB',   label: '8B · common · needs decent GPU' },
-    'llama-70b': { id: 'Llama-3.1-70B-Instruct-q4f16_1-MLC',  size: '~40GB',  label: '70B · frontier · needs serious GPU + 64GB+ RAM' },
-  };
+    'llama-70b': { id: 'Llama-3.1-70B-Instruct-q4f16_1-MLC',  size: '~40GB',  label: '70B · frontier · needs serious GPU + 64GB+ RAM' }};
   const DEFAULT_MODEL = 'llama-3b';
 
   const T3_PROVIDERS = {
     anthropic: { label: 'Anthropic Claude', models: ['claude-sonnet-4-5','claude-opus-4-7','claude-haiku-4-5'], default: 'claude-sonnet-4-5', url: 'https://api.anthropic.com/v1/messages' },
     openai:    { label: 'OpenAI',           models: ['gpt-4o','gpt-4o-mini','o1-mini'],                          default: 'gpt-4o-mini',      url: 'https://api.openai.com/v1/chat/completions' },
-    google:    { label: 'Google Gemini',    models: ['gemini-1.5-pro','gemini-1.5-flash','gemini-2.0-flash-exp'], default: 'gemini-1.5-flash', url: 'https://generativelanguage.googleapis.com/v1beta/models/' },
-  };
+    google:    { label: 'Google Gemini',    models: ['gemini-1.5-pro','gemini-1.5-flash','gemini-2.0-flash-exp'], default: 'gemini-1.5-flash', url: 'https://generativelanguage.googleapis.com/v1beta/models/' }};
 
   // ─── State ───────────────────────────────────────────────────────
   const STATE = {
     config: loadConfig(),
     ai: { ready: false, loading: false, progress: 0, engine: null, model: null },
-    mesh: { active: false, peers: new Map(), bc: null, signal: null },
-  };
+    mesh: { active: false, peers: new Map(), bc: null, signal: null }};
 
   function loadConfig() {
     try { return JSON.parse(localStorage.getItem('fall-kit.config') || '{}'); }
@@ -336,8 +333,7 @@ input[type=radio]{width:auto;margin-right:6px;accent-color:var(--brass)}
     if (tier === 'T2' && STATE.ai.ready && STATE.ai.engine) {
       const r = await STATE.ai.engine.chat.completions.create({
         messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userMsg }],
-        max_tokens: maxTokens,
-      });
+        max_tokens: maxTokens});
       return r.choices[0].message.content;
     }
     if (tier === 'T3' && STATE.config.api_key && STATE.config.api_provider) {
@@ -354,8 +350,7 @@ input[type=radio]{width:auto;margin-right:6px;accent-color:var(--brass)}
       const r = await fetch(T3_PROVIDERS.anthropic.url, {
         method: 'POST',
         headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
-        body: JSON.stringify({ model, max_tokens: maxTokens, system: sys, messages: [{ role: 'user', content: msg }] }),
-      });
+        body: JSON.stringify({ model, max_tokens: maxTokens, system: sys, messages: [{ role: 'user', content: msg }] })});
       if (!r.ok) throw new Error('Anthropic ' + r.status + ': ' + (await r.text()).slice(0, 200));
       const j = await r.json();
       return j.content[0].text;
@@ -364,8 +359,7 @@ input[type=radio]{width:auto;margin-right:6px;accent-color:var(--brass)}
       const r = await fetch(T3_PROVIDERS.openai.url, {
         method: 'POST',
         headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key },
-        body: JSON.stringify({ model, max_tokens: maxTokens, messages: [{ role: 'system', content: sys }, { role: 'user', content: msg }] }),
-      });
+        body: JSON.stringify({ model, max_tokens: maxTokens, messages: [{ role: 'system', content: sys }, { role: 'user', content: msg }] })});
       if (!r.ok) throw new Error('OpenAI ' + r.status);
       const j = await r.json();
       return j.choices[0].message.content;
@@ -374,8 +368,7 @@ input[type=radio]{width:auto;margin-right:6px;accent-color:var(--brass)}
       const r = await fetch(T3_PROVIDERS.google.url + model + ':generateContent?key=' + encodeURIComponent(key), {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: sys + '\n\n---\n\n' + msg }] }], generationConfig: { maxOutputTokens: maxTokens } }),
-      });
+        body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: sys + '\n\n---\n\n' + msg }] }], generationConfig: { maxOutputTokens: maxTokens } })});
       if (!r.ok) throw new Error('Google ' + r.status);
       const j = await r.json();
       return j.candidates[0].content.parts[0].text;
@@ -616,8 +609,7 @@ input[type=radio]{width:auto;margin-right:6px;accent-color:var(--brass)}
     openMint: openMint,  // v1.2 · launch kcc-mint with this seed prefilled as parent
     MODELS: WEBLLM_MODELS,
     PROVIDERS: T3_PROVIDERS,
-    state: STATE,
-  };
+    state: STATE};
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -671,8 +663,7 @@ const TABS=[
   {id:'dashboard',label:'Dashboard'},
   {id:'firm',label:'Firm'},
   {id:'advisers',label:'Advisers'},
-  {id:'qa',label:'AML Help'},
-];
+  {id:'qa',label:'AML Help'}];
 
 // AML re-review cadence (days) by risk grade
 const REVIEW_CADENCE={low:365,medium:180,high:90};
@@ -723,13 +714,11 @@ let state={
     anthropicKey:'',openaiKey:'',geminiKey:'',openrouterKey:'',
     auditChain:true,
     isDemoSeeded:false,
-    setupDismissed:false,
-  },
+    setupDismissed:false},
   ui:{
     filter:{kyc:'',risk:'',adviser:'',due:false},
     wizard:null,
-    activeClient:null,
-  }
+    activeClient:null}
 };
 
 // ════════════════════════════════════════════════════════════════
@@ -786,8 +775,7 @@ async function persistState(){
     advisers:state.advisers,
     clients:state.clients,
     chat:state.chat,
-    settings:state.settings,
-  };
+    settings:state.settings};
   // mirror to localStorage as fallback
   try{localStorage.setItem(STORE+'.state',JSON.stringify(snap))}catch(e){}
   return idbPut('state',snap,'main');
@@ -1186,7 +1174,7 @@ Domestic PEPs (UK) require EDD but FCA has clarified lower-risk treatment than f
 
 **Retention:** **5 years from end of business relationship** (MLR 2017 reg.40); FCA SYSC requires 7 years for related supervisory records.`},
   {match:/source of funds.*wealth|sof.*sow|funds vs wealth/i,title:'Source of funds vs source of wealth',answer:()=>`**Source of funds (SoF)** = where the **money for this specific transaction** comes from. Concrete, recent, traceable.
-- "£50k from the sale of my BTL flat at 12 Oak Rd, completed 14 March 2026, conveyancer Smith & Co."
+- "TBAk from the sale of my BTL flat at 12 Oak Rd, completed 14 March 2026, conveyancer Smith & Co."
 
 **Source of wealth (SoW)** = how the client's **overall wealth was accumulated over their lifetime**. Strategic, cumulative.
 - "27 years as NHS consultant + inheritance from mother 2019 + property growth since 2003."
@@ -1326,7 +1314,7 @@ Domestic PEPs (UK) require EDD but FCA has clarified lower-risk treatment than f
 
 **Four outcomes:**
 1. **Products & services** — fit for purpose for target market
-2. **Price & value** — fair value assessment, documented
+2. **Access & value** — fair value assessment, documented
 3. **Consumer understanding** — communications tested for clarity
 4. **Consumer support** — no unreasonable barriers to action
 
@@ -1374,8 +1362,7 @@ Domestic PEPs (UK) require EDD but FCA has clarified lower-risk treatment than f
 
 **Export workflow:** Settings → "Download audit chain" → encrypted JSON to cold storage off-device. Recompute hashes annually as part of compliance file review.
 
-**Cap:** 50,000 entries (configurable). At ~10/client/year that's 5,000 client-years — comfortably fits a 1-10 person firm.`},
-];
+**Cap:** 50,000 entries (configurable). At ~10/client/year that's 5,000 client-years — comfortably fits a 1-10 person firm.`}];
 
 async function answer(q){
   for(const r of T0_RULES){if(r.match.test(q))return{src:'T0 · '+r.title,text:r.answer()}}
@@ -1700,8 +1687,7 @@ const WIZARD_STEPS=[
   {k:'vulnerability',l:'Vulnerability'},
   {k:'documents',l:'Documents'},
   {k:'risk',l:'AML risk'},
-  {k:'confirm',l:'Confirm'},
-];
+  {k:'confirm',l:'Confirm'}];
 
 function newClient(){
   if(!state.firm){toast('Set up firm first');go('firm');return}
@@ -2442,8 +2428,7 @@ async function exportAll(){
     meta:{tool:TOOLNAME,version:VERSION,exportedAt:now(),schemaVersion:SCHEMA_V,prime:PRIME},
     state:{firm:state.firm,advisers:state.advisers,clients:state.clients,settings:state.settings},
     audit:state.audit,
-    documents:docsSer,
-  };
+    documents:docsSer};
   let blob, fname=`fallonboard-export-${fmtDateISO(now())}.json`;
   if(pass){
     const enc=new TextEncoder();
