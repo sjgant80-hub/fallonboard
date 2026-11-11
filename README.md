@@ -290,4 +290,4 @@ MIT — see `LICENSE`.
 
 ---
 
-`◊ fallonboard@1.0.0 · prime 727 · schema v1 · sovereign`
+`◊ fallonboard@1.0.0 · schema v1 · sovereign`
